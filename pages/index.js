@@ -2,104 +2,178 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 
+import {
+  Button,
+  ChakraProvider,
+  Input,
+  Heading,
+  Text,
+  Center,
+  Card,
+  CardHeader,
+  CardBody,
+  Stack,
+  StackDivider,
+  Box,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+
 export default function Home() {
-  const [airport, setAirport] = useState("")
-  const [weather, setWeather] = useState(null)
+  const [airport, setAirport] = useState("");
+  const [data, setData] = useState(null);
 
   async function weatherLookup() {
     if (!airport) {
-      alert("No airport given :(")
-      return
+      alert("No airport given");
+      return;
     }
     await fetch("/api/weather", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({airport})
-    }).then((res) => res.json()).then((data) => {
-      setWeather(data)
+      body: JSON.stringify({ airport }),
     })
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
+  }
+
+  const Information = () => {
+    return data ? (
+      <Tabs m={20}>
+            <TabList>
+              <Tab>Weather</Tab>
+              <Tab>Airport Information</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <Card m={20}>
+                  <CardHeader>
+                    <Heading size="md">Weather Report</Heading>
+                  </CardHeader>
+
+                  <CardBody>
+                    <Stack divider={<StackDivider />} spacing="4">
+                      <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                          Overview
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                          {data.weather.weather[0].description}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                          Visibility
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                        {data.weather.visibility}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                          Wind
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                        <p>Degrees: {data.weather.wind.deg}</p>
+                        <p>Speed: {data.weather.wind.speed}</p>
+                        </Text>
+                      </Box>
+                    </Stack>
+                  </CardBody>
+                </Card>
+              </TabPanel>
+              <TabPanel>
+                <Card m={20}>
+                  <CardHeader>
+                    <Heading size="md">Airport Information</Heading>
+                  </CardHeader>
+
+                  <CardBody>
+                    <Stack divider={<StackDivider />} spacing="4">
+                      <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                          Overview
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                          Runways
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Heading size="xs" textTransform="uppercase">
+                        </Heading>
+                        <Text pt="2" fontSize="sm">
+                        </Text>
+                      </Box>
+                    </Stack>
+                  </CardBody>
+                </Card>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+    ) : <></>
   }
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Go/No-Go Decision</title>
-      </Head>
+    <ChakraProvider>
+      <div className={styles.container}>
+        <Head>
+          <title>Go/No-Go Decision</title>
+        </Head>
 
-      <main>
-        <h1 className={styles.title}>Go/No-Go Decision Support Tool</h1>
+        <main>
+          <Heading as="h1" size="3xl" mt={100} textAlign={"center"}>
+            Go/No-Go Decision Support
+          </Heading>
+          <Text fontSize="xl" m={15} p={15} textAlign={"center"}>
+            Supporting general aviation pilots in training in making an informed
+            decision on whether conditions are safe to proceed with a flight
+            (go) or if it is better to delay or cancel (no-go) based on a
+            variety of factors.
+          </Text>
 
-        <input
-          value={airport}
-          onChange={(e) => {
-            setAirport(e.target.value)
-          }}
-        />
-        <button
-          onClick={weatherLookup}
-        >Search</button>
+          <Heading as="h2" size="xl" textAlign={"center"} m={15} mt={100}>
+            Airport Search
+          </Heading>
+          <Text textAlign={"center"} fontSize="l" m={15}>
+            Enter the airport's ICAO code
+          </Text>
 
-        <p>{JSON.stringify(weather)}</p>
-
-        {/* <form action="/api/weather" method="post">
-          <label for="airport">Airport Iata Code:</label>
-          <input type="text" id="airport" name="airport" />
-          <button type="submit">Submit</button>
-        </form> */}
-      </main>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+          <Center>
+            <Input
+              htmlSize={9}
+              width="auto"
+              variant="outline"
+              placeholder="ICAO Code"
+              textAlign={"center"}
+              value={airport}
+              onChange={(e) => {
+                setAirport(e.target.value);
+              }}
+            />
+          </Center>
+          <Center>
+            <Button m={5} onClick={weatherLookup}>
+              Search
+            </Button>
+          </Center>
+          
+          <Information />
+        </main>
+      </div>
+    </ChakraProvider>
   );
 }
