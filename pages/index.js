@@ -1,5 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import Airplane from "../components/airplane";
 import { useState } from "react";
 
 import {
@@ -13,6 +14,7 @@ import {
   CardHeader,
   CardBody,
   Stack,
+  HStack,
   StackDivider,
   Box,
   Tabs,
@@ -20,10 +22,18 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  VStack,
+  Select,
 } from "@chakra-ui/react";
 
 export default function Home() {
   const [airport, setAirport] = useState("");
+  const [visibility, setVisibility] = useState("");
+  const [crosswind, setCrosswind] = useState("");
+  const [wind, setWind] = useState("");
+  const [ceiling, setCeiling] = useState("");
+  const [precipitation, setPrecipitation] = useState("");
+
   const [data, setData] = useState(null);
 
   async function weatherLookup() {
@@ -50,7 +60,7 @@ export default function Home() {
 
   const Information = () => {
     return data ? (
-      <Tabs m={20}>
+      <Tabs ml={"4"}>
         <TabList>
           <Tab>Weather</Tab>
           <Tab>Airport Information</Tab>
@@ -58,11 +68,7 @@ export default function Home() {
 
         <TabPanels>
           <TabPanel>
-            <Card m={20}>
-              <CardHeader>
-                <Heading size="md">Weather Report</Heading>
-              </CardHeader>
-
+            <Card>
               <CardBody>
                 <Stack divider={<StackDivider />} spacing="4">
                   <Box>
@@ -95,11 +101,7 @@ export default function Home() {
             </Card>
           </TabPanel>
           <TabPanel>
-            <Card m={20}>
-              <CardHeader>
-                <Heading size="md">Airport Information</Heading>
-              </CardHeader>
-
+            <Card>
               <CardBody>
                 <Stack divider={<StackDivider />} spacing="4">
                   <Box>
@@ -131,51 +133,132 @@ export default function Home() {
 
   return (
     <ChakraProvider>
-      <div className={styles.container}>
-        <Head>
-          <title>Go/No-Go Decision</title>
-        </Head>
-
+      <Head>
+        <title>Go/No-Go Decision</title>
+      </Head>
         <main>
-          <Heading as="h1" size="3xl" mt={100} textAlign={"center"}>
+          <Box mb={"24"} mt={"-8"}>
+          <Center>
+            <Airplane />
+          </Center>
+          <Heading
+            as="h1"
+            fontSize={"1.3em"}
+            textAlign={"center"}
+            transform={"rotate(-10deg)"}
+            pl={"80px"}
+            mt={"-150px"}
+            color={"gray.700"}
+          >
             Go/No-Go Decision Support
           </Heading>
-          <Text fontSize="xl" m={15} p={15} textAlign={"center"}>
-            Supporting general aviation pilots in training in making an informed
-            decision on whether conditions are safe to proceed with a flight
-            (go) or if it is better to delay or cancel (no-go) based on a
-            variety of factors.
-          </Text>
+          </Box>
 
-          <Heading as="h2" size="xl" textAlign={"center"} m={15} mt={100}>
-            Airport Search
-          </Heading>
-          <Text textAlign={"center"} fontSize="l" m={15}>
-            Enter the airport's ICAO code
-          </Text>
-
-          <Center>
-            <Input
-              htmlSize={9}
-              width="auto"
-              variant="outline"
-              placeholder="ICAO Code"
-              textAlign={"center"}
-              value={airport}
-              onChange={(e) => {
-                setAirport(e.target.value);
-              }}
-            />
-          </Center>
-          <Center>
-            <Button m={5} onClick={weatherLookup}>
-              Search
-            </Button>
-          </Center>
-
-          <Information />
+          <HStack alignItems={"start"}>
+            <Box
+              flex={"1"}
+              borderRight={"2px"}
+              borderColor={"gray.300"}
+              pr={"4"}
+            >
+              <Text textAlign={"center"} fontSize="l" m={15} fontWeight={"bold"}>
+                Enter the airport's ICAO code:
+              </Text>
+              <Center>
+                <Input
+                  htmlSize={9}
+                  width="auto"
+                  variant="outline"
+                  placeholder="ICAO Code"
+                  textAlign={"center"}
+                  value={airport}
+                  onChange={(e) => {
+                    setAirport(e.target.value);
+                  }}
+                />
+              </Center>
+              <Text textAlign={"center"} fontSize="l" m={15} fontWeight={"bold"}>
+                Enter your personal minimums:
+              </Text>
+              <VStack>
+              <HStack>
+                <VStack>
+                  <Text>Visibility (mi)</Text>
+                  <Input
+                    htmlSize={9}
+                    placeholder="Ex: 2"
+                    textAlign={"center"}
+                    value={visibility}
+                    onChange={(e) => {
+                      setVisibility(e.target.value);
+                    }}
+                  />
+                </VStack>
+                <VStack>
+                  <Text>Crosswind (kn)</Text>
+                  <Input
+                    htmlSize={9}
+                    placeholder="Ex: 17"
+                    textAlign={"center"}
+                    value={crosswind}
+                    onChange={(e) => {
+                      setCrosswind(e.target.value);
+                    }}
+                  />
+                </VStack>
+                <VStack>
+                  <Text>Wind (kn)</Text>
+                  <Input
+                    htmlSize={9}
+                    placeholder="Ex: 17"
+                    textAlign={"center"}
+                    value={wind}
+                    onChange={(e) => {
+                      setWind(e.target.value);
+                    }}
+                  />
+                </VStack>
+              </HStack>
+              <HStack>
+                <VStack>
+                  <Text>Ceiling (ft)</Text>
+                  <Input
+                    htmlSize={9}
+                    placeholder="Ex: 10000"
+                    textAlign={"center"}
+                    value={ceiling}
+                    onChange={(e) => {
+                      setCeiling(e.target.value);
+                    }}
+                  />
+                </VStack>
+                <VStack>
+                  <Text>Precipitation</Text>
+                  <Select
+                    placeholder="Select..."
+                    value={precipitation}
+                    onChange={(e) => {
+                      setPrecipitation(e.target.value);
+                    }}
+                  >
+                    <option>None</option>
+                    <option>Drizzle is fine</option>
+                    <option>No restrictions</option>
+                  </Select>
+                </VStack>
+              </HStack>
+              </VStack>
+              <Center>
+                <Button m={5} onClick={weatherLookup}>
+                  Should I fly?
+                </Button>
+              </Center>
+            </Box>
+            <Box flex={"1"}>
+              <Information />
+            </Box>
+          </HStack>
         </main>
-      </div>
     </ChakraProvider>
   );
 }
