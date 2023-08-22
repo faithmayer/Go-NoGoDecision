@@ -40,92 +40,94 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setData(data);
+        if (data.message) {
+          alert(data.message);
+        } else {
+          setData(data);
+        }
       });
   }
 
   const Information = () => {
     return data ? (
       <Tabs m={20}>
-            <TabList>
-              <Tab>Weather</Tab>
-              <Tab>Airport Information</Tab>
-            </TabList>
+        <TabList>
+          <Tab>Weather</Tab>
+          <Tab>Airport Information</Tab>
+        </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <Card m={20}>
-                  <CardHeader>
-                    <Heading size="md">Weather Report</Heading>
-                  </CardHeader>
+        <TabPanels>
+          <TabPanel>
+            <Card m={20}>
+              <CardHeader>
+                <Heading size="md">Weather Report</Heading>
+              </CardHeader>
 
-                  <CardBody>
-                    <Stack divider={<StackDivider />} spacing="4">
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Overview
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                          {data.weather.weather[0].description}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Visibility
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                        {data.weather.visibility}
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Wind
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                        <p>Degrees: {data.weather.wind.deg}</p>
-                        <p>Speed: {data.weather.wind.speed}</p>
-                        </Text>
-                      </Box>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </TabPanel>
-              <TabPanel>
-                <Card m={20}>
-                  <CardHeader>
-                    <Heading size="md">Airport Information</Heading>
-                  </CardHeader>
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing="4">
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      Overview
+                    </Heading>
+                    <Text pt="2" fontSize="sm">
+                      {data.weather.weather[0].description}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      Visibility
+                    </Heading>
+                    <Text pt="2" fontSize="sm">
+                      {data.weather.visibility}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      Wind
+                    </Heading>
+                    <Text pt="2" fontSize="sm">
+                      <p>Degrees: {data.weather.wind.deg}</p>
+                      <p>Speed: {data.weather.wind.speed}</p>
+                    </Text>
+                  </Box>
+                </Stack>
+              </CardBody>
+            </Card>
+          </TabPanel>
+          <TabPanel>
+            <Card m={20}>
+              <CardHeader>
+                <Heading size="md">Airport Information</Heading>
+              </CardHeader>
 
-                  <CardBody>
-                    <Stack divider={<StackDivider />} spacing="4">
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Overview
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                          Runways
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Heading size="xs" textTransform="uppercase">
-                        </Heading>
-                        <Text pt="2" fontSize="sm">
-                        </Text>
-                      </Box>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-    ) : <></>
-  }
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing="4">
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      Overview
+                    </Heading>
+                    <Text pt="2" fontSize="sm"></Text>
+                  </Box>
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase">
+                      Runways
+                    </Heading>
+                    <Text pt="2" fontSize="sm"></Text>
+                  </Box>
+                  <Box>
+                    <Heading size="xs" textTransform="uppercase"></Heading>
+                    <Text pt="2" fontSize="sm"></Text>
+                  </Box>
+                </Stack>
+              </CardBody>
+            </Card>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    ) : (
+      <></>
+    );
+  };
 
   return (
     <ChakraProvider>
@@ -170,7 +172,7 @@ export default function Home() {
               Search
             </Button>
           </Center>
-          
+
           <Information />
         </main>
       </div>
