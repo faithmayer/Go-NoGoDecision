@@ -15,4 +15,4 @@ This app was built using Next.js.
 2. Run the development server\
 `npm run dev`
 
-2. Open http://localhost:3000 from your browser.
+2. Open http://localhost:3000 in a browser.
