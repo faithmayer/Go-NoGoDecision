@@ -9,7 +9,10 @@ This tool is provided for informational and educational purposes only. It is not
 ## Development
 This app was built using Next.js.
 
-1. Run the development server
+1. Install dependencies\
+`npm install`
+
+2. Run the development server\
 `npm run dev`
 
 2. Open http://localhost:3000 from your browser.
